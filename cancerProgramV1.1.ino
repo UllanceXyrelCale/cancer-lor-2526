@@ -190,7 +190,8 @@ void loop() {
 
     // Flipping mechanism logic
     bool r1FlipPressed = myController->r1();
-    bool bFlipPressed = myController->l1();
+    bool r2FlipPressed = myController->r2();
+    bool l2FlipPressed = myController->l2();
 
     // Deadzone
     if (abs(forward) < 40) forward = 0;
@@ -211,6 +212,10 @@ void loop() {
     // Flipping values for the flpper
     const int SERVO_FLIP_90A = 180;
     const int SERVO_FLIP_90B = 0;
+    const int SERVO_FLIP_45A = 135;
+    const int SERVO_FLIP_45B = 45;
+    const int SERVO_FLIP_180A = 270;
+    const int SERVO_FLIP_180B = -270;
     const int SERVO_HOME = 90;
 
     // Invert left motors to match right side direction
@@ -243,6 +248,22 @@ void loop() {
     } else {
         MotorOutput[LEFT_SERVO].write(SERVO_HOME);
         MotorOutput[RIGHT_SERVO].write(SERVO_HOME);
+    }
+
+    //////////////////////////////////////////////
+    //      45 degree flipiping mechanism       //
+    //////////////////////////////////////////////
+    if (r2FlipPressed > 0) {
+        MotorOutput[LEFT_SERVO].write(SERVO_FLIP_45A);
+        MotorOutput[RIGHT_SERVO].write(SERVO_FLIP_45B);      
+    } 
+    
+    //////////////////////////////////////////////
+    //      180 degree flipiping mechanism      //
+    //////////////////////////////////////////////
+    else if (l2FlipPressed > 0) {
+        MotorOutput[LEFT_SERVO].write(SERVO_FLIP_180A);
+        MotorOutput[RIGHT_SERVO].write(SERVO_FLIP_180B);
     }
 
   } else {
