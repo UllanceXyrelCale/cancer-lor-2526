@@ -167,9 +167,11 @@ void setup() {
   Serial.println("LoRcore V3 System Ready!");
 }
 
+// ---------- Flipping Global Variables ----------- //
+
 // Define servo motor pins
-const int LEFT_SERVO = 6;
-const int RIGHT_SERVO = 7;
+const int LEFT_SERVO = 5;
+const int RIGHT_SERVO = 6;
 
 // Flipping Logic
 bool aFlipPressedPrev = false; 
@@ -187,8 +189,8 @@ void loop() {
     int turn    = myController->axisRX();  // Right joystick X = turn
 
     // Flipping mechanism logic
-    bool aFlipPressed = myController->b();
-    bool bFlipPressed = myController->a();
+    bool aFlipPressed = myController->r1();
+    bool bFlipPressed = myController->l1();
 
     // Deadzone
     if (abs(forward) < 40) forward = 0;
@@ -219,6 +221,13 @@ void loop() {
     MotorOutput[3].write(MappedRight);
     MotorOutput[4].write(MappedRight);
 
+    // Rainbow LED animation
+    fill_rainbow(leds, LED_COUNT, rainbowHue++, 20);
+    FastLED.show();
+    delay(50);
+
+    // ---------- Flipping Mechanism Logic ----------
+
     //////////////////////////////////////////////
     //      Flipping mechanism that stays       //
     //////////////////////////////////////////////
@@ -241,19 +250,15 @@ void loop() {
     if (bFlipPressed){
         MotorOutput[LEFT_SERVO].write(SERVO_FLIP);
         MotorOutput[RIGHT_SERVO].write(0); 
-        delay(500);
+        delay(1500);
         MotorOutput[LEFT_SERVO].write(SERVO_HOME);
         MotorOutput[RIGHT_SERVO].write(SERVO_HOME);        
     }
-
-    // Rainbow LED animation
-    fill_rainbow(leds, LED_COUNT, rainbowHue++, 20);
-    FastLED.show();
-    delay(50);
 
   } else {
     for (int i = 1; i <= 4; i++) MotorOutput[i].write(90); // stop motors
     fill_solid(leds, LED_COUNT, CRGB(0, 80, 255));
     FastLED.show();
   }
+
 }
