@@ -174,8 +174,8 @@ const int LEFT_SERVO = 5;
 const int RIGHT_SERVO = 6;
 
 // Flipping Logic
-bool aFlipPressedPrev = false; 
-bool flipActivate = false;
+bool r1FlipPressedPrev = false; 
+bool r1flipActivate = false;
 
 void loop() {
   esp_task_wdt_reset();
@@ -189,7 +189,7 @@ void loop() {
     int turn    = myController->axisRX();  // Right joystick X = turn
 
     // Flipping mechanism logic
-    bool aFlipPressed = myController->r1();
+    bool r1FlipPressed = myController->r1();
     bool bFlipPressed = myController->l1();
 
     // Deadzone
@@ -209,7 +209,8 @@ void loop() {
     int MappedRight = map(currentRight, -512, 512, 0, 180);
 
     // Flipping values for the flpper
-    const int SERVO_FLIP = 180;
+    const int SERVO_FLIP_90A = 180;
+    const int SERVO_FLIP_90B = 0;
     const int SERVO_HOME = 90;
 
     // Invert left motors to match right side direction
@@ -229,30 +230,19 @@ void loop() {
     // ---------- Flipping Mechanism Logic ----------
 
     //////////////////////////////////////////////
-    //      Flipping mechanism that stays       //
+    //      90 degree flipiping mechanism       //
     //////////////////////////////////////////////
-    if (aFlipPressed && !aFlipPressedPrev) {
-        flipActivate = !flipActivate; // toggle the flip
+    if (r1FlipPressed && !r1FlipPressedPrev) {
+        r1flipActivate = !r1flipActivate; // toggle the flip
     }
-    aFlipPressedPrev = aFlipPressed;
+    r1FlipPressedPrev = r1FlipPressed;
 
-    if (flipActivate) {
-        MotorOutput[LEFT_SERVO].write(SERVO_FLIP);
-        MotorOutput[RIGHT_SERVO].write(0); 
+    if (r1flipActivate) {
+        MotorOutput[LEFT_SERVO].write(SERVO_FLIP_90A);
+        MotorOutput[RIGHT_SERVO].write(SERVO_FLIP_90B); 
     } else {
         MotorOutput[LEFT_SERVO].write(SERVO_HOME);
         MotorOutput[RIGHT_SERVO].write(SERVO_HOME);
-    }
-
-    //////////////////////////////////////////////
-    //      Instant Flipping mechanism          //
-    //////////////////////////////////////////////    
-    if (bFlipPressed){
-        MotorOutput[LEFT_SERVO].write(SERVO_FLIP);
-        MotorOutput[RIGHT_SERVO].write(0); 
-        delay(1500);
-        MotorOutput[LEFT_SERVO].write(SERVO_HOME);
-        MotorOutput[RIGHT_SERVO].write(SERVO_HOME);        
     }
 
   } else {
