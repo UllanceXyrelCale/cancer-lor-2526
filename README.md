@@ -5,7 +5,18 @@ This is the program written for Magister, a robot for Lord of Robots Minibot Com
 Magister is robot that competes in the Lord of Robots competition. The robot must be built no more that a 6 x 6 x 6 inches area with no weight limit. The goal of the robot is to flip and stack cubes in order to gain points in the competition.
 
 ## Demo
+### Full 3d Model of Magister
 <img width="1392" height="810" alt="image" src="https://github.com/user-attachments/assets/76eef526-f677-4950-ba98-b07c10bbf8a5" />
+
+### Stacking Mechanism
+https://github.com/user-attachments/assets/7ff2e29f-7b89-4c56-a9f8-5d45317b9e7f
+
+### Flipping Mechanism (Earlier Version)
+https://github.com/user-attachments/assets/2111e002-2201-480c-b425-561ce7f8bfe7
+
+### Climb 3D Model and Actual Image
+<img width="1267" height="751" alt="climb" src="https://github.com/user-attachments/assets/0bbcd5b4-168c-4a87-87b2-3d538cf9662e" />
+![20260102_235407](https://github.com/user-attachments/assets/44fc6a9e-d568-4f1a-b31c-c20c2d5664a7)
 
 ## Capabilities
 - An forklift mechanism that grabs cubes and stacks them
