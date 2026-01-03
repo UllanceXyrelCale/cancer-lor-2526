@@ -162,7 +162,7 @@ void setup() {
   ConfigureMotorOutput(4, N20Plus, 90);
   ConfigureMotorOutput(5, MG90_Degree, 90);
   ConfigureMotorOutput(6, MG90_Degree, 90);
-  
+  ConfigureMotorOutput(7, N20Plus, 90);
 
   Serial.println("LoRcore V3 System Ready!");
 }
@@ -177,6 +177,11 @@ const int RIGHT_SERVO = 6;
 bool r1FlipPressedPrev = false; 
 bool r1flipActivate = false;
 
+// ----------- Elevator Global Variables ----------- //
+
+// Define the elevator motor
+const int ELEVATOR_SERVO = 7;
+
 void loop() {
   esp_task_wdt_reset();
   BP32.update();
@@ -187,10 +192,6 @@ void loop() {
     // ---------- ARCADE DRIVE LOGIC ----------
     int forward = -myController->axisY(); // Left joystick Y = forward/back
     int turn    = myController->axisRX();  // Right joystick X = turn
-
-    // Flipping mechanism logic
-    bool r1FlipPressed = myController->r1();
-    bool r2FlipPressed = myController->r2();
 
     // Deadzone
     if (abs(forward) < 40) forward = 0;
@@ -208,13 +209,6 @@ void loop() {
     int MappedLeft  = map(currentLeft,  -512, 512, 0, 180);
     int MappedRight = map(currentRight, -512, 512, 0, 180);
 
-    // Flipping values for the flpper
-    const int SERVO_FLIP_90A = 180;
-    const int SERVO_FLIP_90B = 0;
-    const int SERVO_FLIP_45A = 135;
-    const int SERVO_FLIP_45B = 45;
-    const int SERVO_HOME = 90;
-
     // Invert left motors to match right side direction
     MappedLeft = 180 - MappedLeft;
 
@@ -230,6 +224,16 @@ void loop() {
     delay(50);
 
     // ---------- Flipping Mechanism Logic ----------
+    // Checks if trigger and bumper are pressed 
+    bool r1FlipPressed = myController->r1();
+    bool r2FlipPressed = myController->r2();
+
+    // Flipping values for the flpper
+    const int SERVO_FLIP_90A = 180;
+    const int SERVO_FLIP_90B = 0;
+    const int SERVO_FLIP_45A = 135;
+    const int SERVO_FLIP_45B = 45;
+    const int SERVO_HOME = 90;
 
     //////////////////////////////////////////////
     //      90 degree flipiping mechanism       //
@@ -254,6 +258,31 @@ void loop() {
         MotorOutput[LEFT_SERVO].write(SERVO_FLIP_45A);
         MotorOutput[RIGHT_SERVO].write(SERVO_FLIP_45B);      
     } 
+
+    // ---------- Elevator Mechanism Logic ----------
+    
+    // Maps the controllers
+    bool l1Pressed = myController->l1();
+    bool l2Pressed = myController->l2();
+
+    // Motor state values
+    const int ELEVATOR_UP = 180;
+    const int ELEVATOR_HOME = 90;
+    const int ELEVATOR_DOWN = 0;
+
+    //////////////////////////////////////////////
+    //           Elevator up or down            //
+    //////////////////////////////////////////////
+    if (l1Pressed == true) {
+      MotorOutput[ELEVATOR_SERVO].write(ELEVATOR_DOWN);
+
+    } else if (l2Pressed == true) {
+      MotorOutput[ELEVATOR_SERVO].write(ELEVATOR_UP);
+
+    } else {
+      MotorOutput[ELEVATOR_SERVO].write(ELEVATOR_HOME);
+
+    }
 
   } else {
     for (int i = 1; i <= 4; i++) MotorOutput[i].write(90); // stop motors
