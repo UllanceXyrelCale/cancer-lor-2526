@@ -1,6 +1,10 @@
 # Magister - Minibot 2025-2026
 This is the program written for Magister, a robot for Lord of Robots Minibot Competition.
 
+## Team Members and Roles
+Ullance Xyrel Cale - Programming and CAD
+Mihir Parekh - Mechanical and CAD
+
 ## Overview 
 Magister is robot that competes in the Lord of Robots competition. The robot must be built no more that a 6 x 6 x 6 inches area with no weight limit. The goal of the robot is to flip and stack cubes in order to gain points in the competition.
 
